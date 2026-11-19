@@ -1,0 +1,6 @@
+__pycache__/
+.venv/
+.coverage
+htmlcov/
+mutants/
+.claude/settings.local.json

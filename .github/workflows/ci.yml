@@ -1,0 +1,21 @@
+name: CI backend
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Pruebas con cobertura mínima de 80 %
+        run: |
+          if [ ! -f pyproject.toml ]; then
+            echo "Todavía no hay código de la API; no hay pruebas que correr."
+            exit 0
+          fi
+          uv sync
+          uv run pytest --cov=app --cov-fail-under=80
