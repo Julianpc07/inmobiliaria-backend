@@ -3,4 +3,5 @@ __pycache__/
 .coverage
 htmlcov/
 mutants/
+.pytest_cache/
 .claude/settings.local.json

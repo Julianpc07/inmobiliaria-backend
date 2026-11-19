@@ -1,0 +1,29 @@
+[project]
+name = "inmobiliaria-backend"
+version = "0.1.0"
+description = "API de la Plataforma Inmobiliaria con IA"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.32",
+    "pydantic>=2.9",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "httpx>=0.28",
+    "mutmut>=3.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.coverage.run]
+source = ["app"]
+
+[tool.mutmut]
+paths_to_mutate = ["app/"]
+tests_dir = ["tests/"]

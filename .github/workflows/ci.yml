@@ -7,15 +7,35 @@ on:
 
 jobs:
   pruebas:
+    name: Pruebas y cobertura (mínimo 80 %)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - name: Pruebas con cobertura mínima de 80 %
+      - run: uv sync
+      - name: Pruebas con cobertura
         run: |
-          if [ ! -f pyproject.toml ]; then
-            echo "Todavía no hay código de la API; no hay pruebas que correr."
-            exit 0
+          if ! ls tests/test_*.py >/dev/null 2>&1; then
+            echo "Todavía no hay pruebas."; exit 0
           fi
-          uv sync
-          uv run pytest --cov=app --cov-fail-under=80
+          uv run pytest --cov=app --cov-report=term-missing --cov-fail-under=80
+
+  mutacion:
+    name: Mutación con mutmut (informativo)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - name: mutmut
+        run: |
+          if ! ls tests/test_*.py >/dev/null 2>&1; then exit 0; fi
+          uv run mutmut run --max-children 2 || true
+          uv run mutmut results | tee mutmut.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: informe-mutmut
+          path: mutmut.txt
+          if-no-files-found: ignore

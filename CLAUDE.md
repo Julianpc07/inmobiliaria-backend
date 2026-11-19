@@ -1,20 +1,32 @@
 # CLAUDE.md · inmobiliaria-backend
 
 ## Proyecto
-API de una plataforma inmobiliaria: los visitantes buscan casas, apartamentos y locales en venta o arriendo con filtros, y la inmobiliaria administra sus publicaciones.
+API de una plataforma inmobiliaria: los visitantes buscan casas, apartamentos y locales en venta o arriendo, y la inmobiliaria publica sus inmuebles. El frontend está en el repo `inmobiliaria-frontend` y consume esta API.
 
-## Stack y comandos
-- Python con uv. Instalar: `uv sync`. Pruebas: `uv run pytest`. Servidor: `uv run uvicorn app.main:app --reload`.
-- FastAPI + Pydantic. Por ahora los datos están en `data/inmuebles.json` (después MongoDB).
+## Comandos
+- Instalar: `uv sync`
+- Pruebas: `uv run pytest`
+- Cobertura: `uv run pytest --cov=app --cov-report=term-missing --cov-fail-under=80`
+- Servidor: `uv run uvicorn app.main:app --reload` (http://localhost:8000, documentación en /docs)
 
-## Arquitectura (capas)
-- `app/routers/`: solo reciben la petición y llaman al servicio. Sin lógica.
-- `app/services/`: reglas de negocio.
-- `app/repository.py`: único lugar que lee los datos y filtra.
-- `app/models.py`: modelos Pydantic.
+## Organización
+- `app/main.py`: crea la app de FastAPI, el CORS para `http://localhost:5173` e incluye los routers.
+- `app/models.py`: modelos Pydantic (`Inmueble`, `InmuebleNuevo`).
+- `app/repository.py`: único lugar que lee `data/inmuebles.json` y filtra. Los datos se cargan en memoria.
+- `app/routers/`: un archivo por recurso. Solo reciben la petición y llaman al repositorio. Sin lógica.
+- `tests/`: una prueba por criterio de aceptación, con `TestClient`.
+- `specs/NNN-nombre/`: spec.md, plan.md y tasks.md de cada funcionalidad.
 
-## Reglas
-- Primero la prueba, después el código (TDD). Ninguna prueba se modifica para que pase.
-- Cobertura mínima 80 % (`--cov-fail-under=80`), la revisa el CI.
-- Nada de dependencias nuevas sin que yo lo apruebe.
-- Los agentes no hacen commit ni push. Máximo 2 vueltas por punto de control; si no se resuelve, se me pregunta.
+## Convenciones
+- Nombres en español (inmueble, operacion, ciudad). Sin tildes en el código.
+- Valores permitidos: tipo = casa | apartamento | local; operacion = venta | arriendo.
+- Respuestas de error con `HTTPException` (404 si no existe, 422 si los datos no son válidos).
+
+## Lo que el agente NO debe hacer
+- Modificar una prueba para que pase.
+- Tocar `data/inmuebles.json` o `pyproject.toml`, o agregar dependencias.
+- Hacer commit o push (los hace Julián).
+- Seguir más de 2 vueltas en el mismo punto de control sin preguntar.
+
+## Flujo de trabajo
+Cada funcionalidad es una spec en `specs/`. Se trabaja con `claude --agent orquestador-api` en una rama `NNN-nombre`, primero pruebas (Red), después código (Green), revisión y PR a main.
