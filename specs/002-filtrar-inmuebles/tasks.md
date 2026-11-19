@@ -4,4 +4,4 @@
 - [x] T2 `repository.buscar()` con los 5 filtros (desarrollador-api)
 - [x] T3 Parámetros `Query` en el router y validación de precios (desarrollador-api)
 - [x] T4 Pruebas 001 y 002 en verde y curl con filtros (desarrollador-api)
-- [ ] T5 Revisión y cobertura ≥ 80 % (revisor-api)
+- [x] T5 Revisión y cobertura ≥ 80 % (revisor-api)
