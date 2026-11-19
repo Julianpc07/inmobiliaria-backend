@@ -5,4 +5,4 @@
 - [x] T3 Repositorio que carga el JSON con `listar()` (desarrollador-api)
 - [x] T4 Router `GET /inmuebles` y `main.py` con CORS (desarrollador-api)
 - [x] T5 Pruebas en verde y curl a /inmuebles (desarrollador-api)
-- [ ] T6 Revisión y cobertura ≥ 80 % (revisor-api)
+- [x] T6 Revisión y cobertura ≥ 80 % (revisor-api)
