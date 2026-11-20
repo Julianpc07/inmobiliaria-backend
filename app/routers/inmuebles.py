@@ -19,3 +19,11 @@ def listar_inmuebles(
     if precio_min is not None and precio_max is not None and precio_min > precio_max:
         raise HTTPException(422, "precio_min no puede ser mayor que precio_max")
     return repository.buscar(tipo, operacion, ciudad, precio_min, precio_max)
+
+
+@router.get("/{id}", response_model=Inmueble, status_code=200)
+def obtener_inmueble(id: int):
+    inmueble = repository.obtener(id)
+    if inmueble is None:
+        raise HTTPException(404, "Inmueble no encontrado")
+    return inmueble

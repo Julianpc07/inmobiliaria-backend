@@ -37,5 +37,12 @@ def buscar(
     return resultado
 
 
+def obtener(id: int) -> Inmueble | None:
+    for inmueble in _inmuebles:
+        if inmueble.id == id:
+            return inmueble
+    return None
+
+
 def listar() -> list[Inmueble]:
     return buscar()
