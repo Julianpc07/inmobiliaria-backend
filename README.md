@@ -31,7 +31,7 @@ No uso Spec Kit, así que no hay `constitution.md`: los principios no negociable
 
 | Skill | Qué problema resuelve | Cuándo se invoca | La usa |
 | --- | --- | --- | --- |
-| [`nueva-spec`](.claude/skills/nueva-spec/SKILL.md) | Que todas las specs tengan la misma estructura y criterios verificables | Al empezar una funcionalidad nueva | Julián / orquestador-api |
+| [`nueva-spec`](.claude/skills/nueva-spec/SKILL.md) | Que todas las specs tengan la misma estructura y criterios verificables | Al empezar una funcionalidad nueva | Julián, con Claude sin agente (el orquestador no puede escribir archivos) |
 | [`criterios-a-pruebas`](.claude/skills/criterios-a-pruebas/SKILL.md) | Que cada criterio de aceptación termine en una prueba real, con su matriz, y que las pruebas fallen por el motivo correcto | Paso Red de cada spec | probador-api |
 | [`endpoint-fastapi`](.claude/skills/endpoint-fastapi/SKILL.md) | Que los endpoints respeten las capas router → repository → models y se prueben con curl | Paso Green | desarrollador-api |
 | [`revision-pr`](.claude/skills/revision-pr/SKILL.md) | Que la revisión siempre mire lo mismo y deje hallazgos con el mismo formato para pegarlos en el PR | Antes de abrir el PR | revisor-api |
@@ -80,11 +80,18 @@ Cada spec está en `specs/NNN-nombre/` con `spec.md` (qué y por qué, criterios
 
 | Spec | Qué hace | PR |
 | --- | --- | --- |
-| [001](specs/001-listar-inmuebles/spec.md) | `GET /inmuebles` y CORS para el frontend | [PRs](https://github.com/Julianpc07/inmobiliaria-backend/pulls?q=is%3Apr) |
-| [002](specs/002-filtrar-inmuebles/spec.md) | Filtros por tipo, operación, ciudad y precio | ↑ |
-| [003](specs/003-detalle-inmueble/spec.md) | `GET /inmuebles/{id}` con 404 | ↑ |
-| [004](specs/004-publicar-inmueble/spec.md) | `POST /inmuebles` con validaciones | ↑ |
-| [005](https://github.com/Julianpc07/inmobiliaria-frontend/tree/main/specs/005-catalogo-inmuebles) | Catálogo en el frontend | en el repo del frontend |
+| [001](specs/001-listar-inmuebles/spec.md) | `GET /inmuebles` y CORS para el frontend | [#1](https://github.com/Julianpc07/inmobiliaria-backend/pull/1) · 5 pruebas · 100 % |
+| [002](specs/002-filtrar-inmuebles/spec.md) | Filtros por tipo, operación, ciudad y precio | [#2](https://github.com/Julianpc07/inmobiliaria-backend/pull/2) · 13 pruebas · 98 % |
+| [003](specs/003-detalle-inmueble/spec.md) | `GET /inmuebles/{id}` con 404 | [#3](https://github.com/Julianpc07/inmobiliaria-backend/pull/3) · 16 pruebas · 98 % |
+| [004](specs/004-publicar-inmueble/spec.md) | `POST /inmuebles` con validaciones | [#4](https://github.com/Julianpc07/inmobiliaria-backend/pull/4) · 25 pruebas · 99 % |
+| [005](https://github.com/Julianpc07/inmobiliaria-frontend/tree/main/specs/005-catalogo-inmuebles) | Catálogo en el frontend | [frontend #1](https://github.com/Julianpc07/inmobiliaria-frontend/pull/1) · 7 pruebas · 90 % |
+
+### Lo que encontraron los agentes al usar el arnés
+
+- **Spec 001:** el revisor encontró que la prueba de orden pasaba aunque el código no ordenara (el JSON ya venía ordenado). Se rehízo con datos desordenados; aprobada en la vuelta 2.
+- **Spec 002:** el probador notó que ningún inmueble costaba justo el límite de precio, así que CA4 no comprobaba los límites, y agregó una prueba con precios exactos. Limitación conocida: la ciudad ignora mayúsculas pero no tildes.
+- **Spec 004:** el revisor dejó un hallazgo MEDIO sobre el modelo de lectura; decidí mantenerlo porque los datos cumplen las validaciones.
+- Los hallazgos BAJOS de cada PR quedaron anotados en su comentario para una spec futura.
 
 ## Calidad del código escrito por la IA
 
