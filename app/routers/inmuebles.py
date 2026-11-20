@@ -3,7 +3,7 @@ from typing import Literal
 from fastapi import APIRouter, HTTPException, Query
 
 from app import repository
-from app.models import Inmueble
+from app.models import Inmueble, InmuebleNuevo
 
 router = APIRouter(prefix="/inmuebles", tags=["inmuebles"])
 
@@ -21,7 +21,12 @@ def listar_inmuebles(
     return repository.buscar(tipo, operacion, ciudad, precio_min, precio_max)
 
 
-@router.get("/{id}", response_model=Inmueble, status_code=200)
+@router.post("", response_model=Inmueble, status_code=201)
+def publicar_inmueble(nuevo: InmuebleNuevo):
+    return repository.crear(nuevo)
+
+
+@router.get("/{id}",response_model=Inmueble, status_code=200)
 def obtener_inmueble(id: int):
     inmueble = repository.obtener(id)
     if inmueble is None:

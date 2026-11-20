@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from app.models import Inmueble
+from app.models import Inmueble, InmuebleNuevo
 
 RUTA_DATOS = Path(__file__).resolve().parent.parent / "data" / "inmuebles.json"
 
@@ -46,3 +46,14 @@ def obtener(id: int) -> Inmueble | None:
 
 def listar() -> list[Inmueble]:
     return buscar()
+
+
+def crear(nuevo: InmuebleNuevo) -> Inmueble:
+    siguiente = max((i.id for i in _inmuebles), default=0) + 1
+    inmueble = Inmueble(id=siguiente, **nuevo.model_dump())
+    _inmuebles.append(inmueble)
+    return inmueble
+
+
+def reiniciar() -> None:
+    _inmuebles[:] = _cargar()
