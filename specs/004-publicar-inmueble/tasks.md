@@ -5,4 +5,4 @@
 - [x] T3 `repository.crear()` y `reiniciar()` (desarrollador-api)
 - [x] T4 `POST /inmuebles` con 201 (desarrollador-api)
 - [x] T5 Todas las pruebas en verde y curl con un POST válido y uno inválido (desarrollador-api)
-- [ ] T6 Revisión y cobertura ≥ 80 % (revisor-api)
+- [x] T6 Revisión y cobertura ≥ 80 % (revisor-api)
